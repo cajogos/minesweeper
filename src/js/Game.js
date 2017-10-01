@@ -11,12 +11,12 @@ SWEEPER.Game = function (numRows, numCols, numMines)
     this.numMines = numMines;
     this.restMines = numMines;
 
-    this.isGameBeginning = false;
+    this.isGameStarted = false;
     this.isGameFinished = false;
     this.isFirstClick = false;
 
     this.timeCount = 0;
-    this.timerId;
+    this.timerId = undefined;
 
     // Elements
     this.mainContainer = undefined;
@@ -275,7 +275,7 @@ SWEEPER.Game.prototype._createMineButton = function (mineValue, mineIndex)
     mine.setAttribute('pushed', false);
     mine.setAttribute('detected', false);
 
-    mine.innerText = mineValue; // TODO TESTING ONLY
+    // mine.innerText = mineValue; // TODO TESTING ONLY
 
     // Event handlers
     var gameSelf = this;
@@ -681,25 +681,291 @@ SWEEPER.Game.prototype._createMineButton = function (mineValue, mineIndex)
     return mine;
 };
 
+/**
+ * Check whether the game has finished. Using the following conditions:
+ * 1. All blocks that are not a mine are opened.
+ * 2. All mines have been tagged correctly.
+ */
 SWEEPER.Game.prototype.checkGameStatus = function ()
 {
-    console.warn('NOT IMPLEMENTED checkGameStatus'); // TODO
+    var playerWon = true;
+    var numCols = this.getNumCols();
+    var numRows = this.getNumRows();
+
+    var mine;
+    for (i = 0; i < numRows * numCols; i++)
+    {
+        mine = document.getElementById('mine_' + i);
+        if (mine.getAttribute('mine_value') === SWEEPER.Game.BLOCK_TYPE_MINE)
+        {
+            // If is a mine block
+            if (mine.getAttribute('marked') === 'false')
+            {
+                playerWon = false;
+                break;
+            }
+        }
+        else
+        {
+            if (mine.getAttribute('expanded') === 'false')
+            {
+                playerWon = false;
+                break;
+            }
+        }
+    }
+
+    if (playerWon)
+    {
+        this.gameOver(0);
+    }
 };
 
-SWEEPER.Game.prototype.gameOver = function ()
+SWEEPER.Game.GAME_OVER_WIN = 0;
+SWEEPER.Game.GAME_OVER_LOST = 1;
+SWEEPER.Game.GAME_OVER_TIMEOUT = 2;
+
+/**
+ * @param {number} result
+ */
+SWEEPER.Game.prototype.gameOver = function (result)
 {
-    console.warn('NOT IMPLEMENTED gameOver'); // TODO
+    var title, message, state;
+    switch (result)
+    {
+        case SWEEPER.Game.GAME_OVER_WIN:
+            this.faceImg.src = 'images/win.gif';
+            title = 'Well done!';
+            message = 'You cleared ' + this.getNumMines() + ' mines in only ' + this.timeCount + ' seconds';
+            state = 'success';
+            break;
+        case SWEEPER.Game.GAME_OVER_LOST:
+            this._expandAll();
+            this.faceImg.src = 'images/blast.gif';
+            title = 'You lost!';
+            message = 'You failed to clear ' + this.getNumMines() + ' mines, please try again!';
+            state = 'error';
+            break;
+        case SWEEPER.Game.GAME_OVER_TIMEOUT:
+            this._expandAll();
+            this.faceImg.src = 'images/blast.gif';
+            title = 'You ran out of time!';
+            message = 'Whoa! It really takes you that long? Try again!';
+            state = 'error';
+            break;
+    }
+
+    swal({title: title, text: message, icon: state});
+
+    // Reset stuff
+    clearInterval(this.timerId);
+    this.isGameStarted = false;
+    this.isGameFinished = true;
 };
 
+/**
+ * Handles the time spent playing.
+ * @returns {boolean}
+ * @private
+ */
 SWEEPER.Game.prototype._beginTimer = function ()
 {
-    console.warn('NOT IMPLEMENTED _beginTimer'); // TODO
+    if (this.isGameStarted)
+    {
+        return false;
+    }
+    var gameSelf = this;
+    this.timerId = window.setInterval(function ()
+    {
+        gameSelf.timeCount++;
+        if (gameSelf.timeCount > 999)
+        {
+            gameSelf.gameOver(2);
+        }
+        else
+        {
+            gameSelf.rightBox.innerText = gameSelf.timeCount.toString();
+        }
+    }, 1000);
+    this.isGameStarted = true;
+    return true;
 };
 
-SWEEPER.Game.prototype._expandMineArea = function (mineIndex)
+/**
+ * @param {number} source
+ * @returns {null}
+ * @private
+ */
+SWEEPER.Game.prototype._expandMineArea = function (source)
 {
-    // ExpandMineArea(cur_index);
-    console.warn('NOT IMPLEMENTED _expandMineArea'); // TODO
+    source = parseInt(source, 10);
+
+    var numCols = this.getNumCols();
+    var numRows = this.getNumRows();
+    var i, j, index, tempValue;
+
+    j = source % numCols;
+    i = Math.round((source - j) / numCols);
+
+    mine = document.getElementById('mine_' + source);
+    if ((mine.getAttribute('marked') === 'true') ||
+        (mine.getAttribute('expanded') === 'true') ||
+        (mine.getAttribute('detected') === 'true'))
+    {
+        return null;
+    }
+
+    tempValue = parseInt(mine.getAttribute('mine_value'), 10);
+    switch (tempValue)
+    {
+        case SWEEPER.Game.BLOCK_TYPE_DEFAULT:
+            mine.className = 'mine_down';
+            if (mine.getAttribute('expanded') === 'true')
+            {
+                return null;
+            }
+            mine.setAttribute('expanded', true);
+
+            // Row (i)
+            // (i, j - 1)
+            if ((j - 1) >= 0)
+            {
+                index = numCols * i + j - 1;
+                this._expandMineArea(index);
+            }
+
+            // (i, j + 1)
+            if ((j + 1) < numCols)
+            {
+                index = numCols * i + j + 1;
+                this._expandMineArea(index);
+            }
+            // Row (i - 1)
+            if ((i - 1) >= 0)
+            {
+                // (i - 1, j)
+                index = numCols * (i - 1) + j;
+                this._expandMineArea(index);
+
+                // (i - 1, j - 1)
+                if ((j - 1) >= 0)
+                {
+                    index = numCols * (i - 1) + j - 1;
+                    this._expandMineArea(index);
+                }
+
+                // (i - 1, j + 1)
+                if ((j + 1) < numCols)
+                {
+                    index = numCols * (i - 1) + j + 1;
+                    this._expandMineArea(index);
+                }
+            }
+            // Row (i + 1)
+            if ((i + 1) < numRows)
+            {
+                // (i + 1, j)
+                index = numCols * (i + 1) + j;
+                this._expandMineArea(index);
+
+                // (i + 1, j - 1)
+                if ((j - 1) >= 0)
+                {
+                    index = numCols * (i + 1) + j - 1;
+                    this._expandMineArea(index);
+                }
+                // (i + 1, j + 1)
+                if ((j + 1) < numCols)
+                {
+                    index = numCols * (i + 1) + j + 1;
+                    this._expandMineArea(index);
+                }
+            }
+            break;
+        case 1:
+        case 2:
+        case 3:
+        case 4:
+        case 5:
+        case 6:
+        case 7:
+        case 8:
+            mine.className = 'mine_down_' + tempValue;
+            oMine.innerText = tempValue.toString();
+            oMine.setAttribute('expanded', true);
+            break;
+        case SWEEPER.Game.BLOCK_TYPE_MINE:
+            break;
+    }
+
+    return null;
+};
+
+SWEEPER.Game.prototype._expandAll = function ()
+{
+    var i, tempValue, mine, bomb, error;
+    var numCols = this.getNumCols();
+    var numRows = this.getNumRows();
+    var accumulate = numCols * numRows;
+
+    for (i = 0; i < accumulate; i++)
+    {
+        mine = document.getElementById('mine_' + i);
+        tempValue = parseInt(mine.getAttribute('mine_value'), 10);
+        if (mine.getAttribute('expanded') === 'false')
+        {
+            switch (tempValue)
+            {
+                case SWEEPER.Game.BLOCK_TYPE_MINE:
+                    // Keep flag if tagged correctly
+                    if (mine.getAttribute('marked') === 'true')
+                    {
+                        mine.className = 'mine_down_bomb';
+                        break;
+                    }
+                    // Show a mine flag otherwise
+                    if (mine.hasChildNodes())
+                    {
+                        mine.removeChild(mine.firstChild);
+                    }
+                    mine.className = 'mine_down_bomb';
+
+                    // Bomb image
+                    bomb = document.createElement('img');
+                    bomb.style.width = '15px';
+                    bomb.style.height = '15px';
+                    bomb.style.padding = '0px';
+                    bomb.style.margin = '0px';
+                    bomb.src = 'images/bomb.gif';
+                    mine.appendChild(bomb);
+
+                    mine.setAttribute('expanded', true);
+                    break;
+            }
+
+            // If flag is wrong then show the error icon
+            if (mine.getAttribute('marked') === 'true' && tempValue !== SWEEPER.Game.BLOCK_TYPE_MINE)
+            {
+                if (mine.hasChildNodes())
+                {
+                    mine.removeChild(mine.firstChild);
+                }
+                mine.className = 'mine_down_bomb';
+                mine.innerText = '';
+
+                // Error image
+                error = document.createElement('img');
+                error.style.width = '15px';
+                error.style.height = '15px';
+                error.style.padding = '0px';
+                error.style.margin = '0px';
+                error.src = 'images/error.gif';
+                mine.appendChild(error);
+
+                mine.setAttribute('expanded', true);
+            }
+        }
+    }
 };
 
 /**
