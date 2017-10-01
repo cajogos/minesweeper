@@ -5,7 +5,7 @@
 
 ## Playable demo
 
-- Demo will be coming soon to my personal website:
+- Demo can be played on my personal website:
   - https://carlos.fyi/minesweeper
 
 ## How to play
