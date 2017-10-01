@@ -7,6 +7,7 @@
 	<!-- Stylesheets -->
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"/>
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/journal/bootstrap.min.css"/>
+	<link rel="stylesheet" href="https://carlos.fyi/assets/css/main.css"/>
 	<link rel="stylesheet" href="src/css/sweeper.css"/>
 
 	<link rel="stylesheet" href="Mine.Style.css"/>
@@ -24,25 +25,45 @@
 <body>
 	<div class="container">
 		<div class="mine-game">
-			<h1>Minesweeper!</h1>
-			<div class="button-area">
-				<p>Configuration area:</p>
-				<button type="button" id="start-btn"><i class="fa fa-flag"></i> Start</button>
-				<button type="button" id="reset-btn"><i class="fa fa-refresh"></i> Reset</button>
-				<hr/>
-				<div>
-					<label for="num-rows">Num Rows: <span id="num-rows-value"></span></label><br/>
-					<input type="range" id="num-rows" min="8" max="50" step="2" value="16"/>
+			<div class="row">
+				<div class="col-xs-6">
+					<h1>Minesweeper!</h1>
 				</div>
-				<div>
-					<label for="num-cols">Num Cols: <span id="num-cols-value"></span></label><br/>
-					<input type="range" id="num-cols" min="8" max="50" step="2" value="16"/>
-				</div>
-				<div>
-					<label for="num-mines">Num Mines: <span id="num-mines-value"></span></label><br/>
-					<input type="range" id="num-mines" min="8" max="12" step="1" value="28"/>
+				<div class="col-xs-6">
+					<div class="row">
+						<div class="col-xs-6">
+							<a class="github-button" href="https://github.com/cajogos/minesweeper/fork"
+							   data-size="large" data-show-count="true" aria-label="Fork cajogos/minesweeper on GitHub">Fork</a>
+							<a class="github-button" href="https://github.com/cajogos/minesweeper"
+							   data-icon="octicon-star" data-size="large" data-show-count="true"
+							   aria-label="Star cajogos/minesweeper on GitHub">Star</a>
+						</div>
+						<div class="col-xs-6">
+							<button type="button" class="btn btn-success" id="start-btn">
+								<i class="fa fa-flag"></i> Start
+							</button>
+							<button type="button" class="btn btn-primary" id="reset-btn">
+								<i class="fa fa-refresh"></i> Reset
+							</button>
+						</div>
+					</div>
+					<div class="row config-area">
+						<div class="col-xs-3">
+							<label class="small" for="num-rows">Num Rows: <span id="num-rows-value"></span></label>
+							<input type="range" id="num-rows" min="8" max="50" step="2" value="16"/>
+						</div>
+						<div class="col-xs-3">
+							<label class="small" for="num-cols">Num Cols: <span id="num-cols-value"></span></label>
+							<input type="range" id="num-cols" min="8" max="50" step="2" value="16"/>
+						</div>
+						<div class="col-xs-6">
+							<label class="small" for="num-mines">Num Mines: <span id="num-mines-value"></span></label>
+							<input type="range" id="num-mines" min="8" max="12" step="1" value="28"/>
+						</div>
+					</div>
 				</div>
 			</div>
+			<hr/>
 			<div id="game-area"></div>
 		</div>
 	</div>
@@ -66,5 +87,8 @@
             SWEEPER.init(sweeperOptions);
         });
 	</script>
+
+	<!-- Place this tag in your head or just before your close body tag. -->
+	<script async defer src="https://buttons.github.io/buttons.js"></script>
 </body>
 </html>
