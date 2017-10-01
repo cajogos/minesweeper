@@ -190,6 +190,23 @@ SWEEPER._configElements = function ()
         self._handleMinesInputChange($(this), e);
     });
     this.inputs.mines.trigger('input');
+
+    // Disable right-click and context menus
+    document.oncontextmenu = function(event)
+    {
+        event.cancelBubble = true;
+        event.returnValue = false;
+        return false;
+    };
+    document.onmousedown = function(event)
+    {
+        if (event.button === 2 || event.button === 3)
+        {
+            event.cancelBubble = true;
+            event.returnValue = false;
+            return false;
+        }
+    };
 };
 
 /**

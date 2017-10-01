@@ -98,7 +98,7 @@ SWEEPER.Game.prototype.init = function (callback)
 SWEEPER.Game.prototype._createMainContainer = function ()
 {
     // Each mine 18px + panel border + 3px + main_container's border 6px // TODO
-    var fullWidth = 24 * this.getNumCols() + 6;
+    var fullWidth = 24 * this.getNumCols() + 14;
 
     // Main Container creation
     this.mainContainer = document.createElement('div');
@@ -112,6 +112,22 @@ SWEEPER.Game.prototype._createMainContainer = function ()
     this._createMineArea();
 
     SWEEPER.getGameArea().append(this.mainContainer);
+};
+
+SWEEPER.Game.prototype._refreshMainContainer = function()
+{
+    this.isGameStarted = false;
+    this.isGameFinished = false;
+    this.isFirstClick = false;
+
+    clearInterval(this.timerId);
+    this.timeCount = 0;
+
+    this.restMines = this.getNumMines();
+
+    SWEEPER.getGameArea().html('');
+
+    this._createMainContainer();
 };
 
 /**
@@ -163,8 +179,8 @@ SWEEPER.Game.prototype._createFaceButton = function ()
 
     this.faceButton = document.createElement('div');
     this.faceButton.className = 'img_button_up';
-    this.faceButton.style.width = '24px';
-    this.faceButton.style.height = '24px';
+    this.faceButton.style.width = '25px';
+    this.faceButton.style.height = '25px';
 
     // Set whether the button is pushed/paused
     this.faceButton.setAttribute('pushed', false);
@@ -177,7 +193,7 @@ SWEEPER.Game.prototype._createFaceButton = function ()
     this.faceImg.style.margin = "2px 0 0 0px";
 
     // Event listeners
-    var self = this;
+    var gameSelf = this;
     this.faceButton.onmousedown = function ()
     {
         this.className = 'img_button_down';
@@ -199,7 +215,7 @@ SWEEPER.Game.prototype._createFaceButton = function ()
         }
         this.className = 'img_button_up';
         this.setAttribute('pushed', false);
-        // RefreshMainFrame(); // TODO
+        gameSelf._refreshMainContainer();
     };
 
     this.faceButton.appendChild(this.faceImg);
@@ -236,7 +252,7 @@ SWEEPER.Game.prototype._createMineArea = function ()
             tempTd = document.createElement('td');
             index = i * this.getNumCols() + j;
 
-            mineButton = this._createMineButton(tempArray[index], index); // TODO
+            mineButton = this._createMineButton(tempArray[index], index);
             tempTd.appendChild(mineButton);
             tempTr.appendChild(tempTd);
         }
@@ -258,7 +274,6 @@ SWEEPER.Game.prototype._createMineButton = function (mineValue, mineIndex)
     var mine = document.createElement('div');
     var tempValue; // Value under current block
     var bomb, flag; // Object for mine and flag
-    var source; // Click source // TODO NOT USED?
     var expanded, marked, detected; // Flags for guesses
 
     mine.id = 'mine_' + mineIndex;

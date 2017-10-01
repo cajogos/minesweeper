@@ -6,6 +6,13 @@ div.mine-game {
     color: transparent;
 }
 
+div.mine-game div#game-area {
+    border: 1px solid red;
+}
+div.mine-game div#game-area * {
+    box-sizing: content-box;
+}
+
 /** FROM Mine.Style.css **/
 
 .button_up {
