@@ -114,6 +114,11 @@ SWEEPER.Game.prototype._createMainContainer = function ()
     SWEEPER.getGameArea().append(this.mainContainer);
 };
 
+SWEEPER.Game.prototype.reset = function ()
+{
+    this._refreshMainContainer();
+};
+
 SWEEPER.Game.prototype._refreshMainContainer = function()
 {
     this.isGameStarted = false;

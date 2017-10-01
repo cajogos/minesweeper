@@ -1,16 +1,14 @@
-div.mine-game {
-    border: 1px solid lightgreen;
-}
+div.mine-game {}
 
-.github-button {
-    color: transparent;
-}
 
-div.mine-game div#game-area {
-    border: 1px solid red;
-}
+div.mine-game div#game-area {}
 div.mine-game div#game-area * {
     box-sizing: content-box;
+}
+
+/* GitHub buttons */
+.github-button {
+    color: transparent;
 }
 
 /** FROM Mine.Style.css **/

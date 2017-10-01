@@ -87,8 +87,14 @@ SWEEPER.startGame = function ()
     {
         this._checkConfig();
 
-        this.game = new SWEEPER.Game(this.NUM_ROWS, this.NUM_COLS, this.NUM_MINES);
-        this.game.init(this.startGameCallback);
+        if (typeof this.game === 'undefined')
+        {
+            SWEEPER.gameArea.html('');
+            this.game = new SWEEPER.Game(this.NUM_ROWS, this.NUM_COLS, this.NUM_MINES);
+            this.game.init(this.startGameCallback);
+        }
+
+        this.buttons.start.attr('disabled', true);
     }
     catch (e)
     {
@@ -98,6 +104,14 @@ SWEEPER.startGame = function ()
             icon: 'error'
         });
         console.warn(e);
+    }
+};
+
+SWEEPER.resetGame = function()
+{
+    if (typeof this.game !== 'undefined')
+    {
+        this.game.reset();
     }
 };
 
@@ -229,8 +243,7 @@ SWEEPER._handleStartButtonClick = function (button, event)
  */
 SWEEPER._handleResetButtonClick = function (button, event)
 {
-    // Stop current game and reset the board
-    console.log('RESET BUTTON', button, event);
+    this.resetGame();
 };
 
 /**
