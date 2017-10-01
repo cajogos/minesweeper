@@ -6,13 +6,11 @@
 
 	<!-- Stylesheets -->
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"/>
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css"/>
 	<link rel="stylesheet" href="Mine.Style.css"/>
 
 	<!-- JavaScripts -->
 	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-	<script type="text/javascript"
-			src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
+	<script type="text/javascript" src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 	<script type="text/javascript" src="Mine.Code.js"></script>
 	<script type="text/javascript" src="sweeper.js"></script>
 
@@ -26,15 +24,15 @@
 		<hr/>
 		<div>
 			<label for="num-rows">Num Rows: <span id="num-rows-value"></span></label><br/>
-			<input type="range" id="num-rows" min="8" max="50" step="2" value="12" />
+			<input type="range" id="num-rows" min="8" max="50" step="2" value="16"/>
 		</div>
 		<div>
 			<label for="num-cols">Num Cols: <span id="num-cols-value"></span></label><br/>
-			<input type="range" id="num-cols" min="8" max="50" step="2" value="12"/>
+			<input type="range" id="num-cols" min="8" max="50" step="2" value="16"/>
 		</div>
 		<div>
 			<label for="num-mines">Num Mines: <span id="num-mines-value"></span></label><br/>
-			<input type="range" id="num-mines" min="8" max="12" step="1"/>
+			<input type="range" id="num-mines" min="8" max="12" step="1" value="28"/>
 		</div>
 	</div>
 	<div id="game-area"></div>
@@ -49,11 +47,11 @@
                     start: $('#start-btn'),
                     reset: $('#reset-btn')
                 },
-				inputs: {
+                inputs: {
                     rows: $('#num-rows'),
-					cols: $('#num-cols'),
-					mines: $('#num-mines')
-				}
+                    cols: $('#num-cols'),
+                    mines: $('#num-mines')
+                }
             };
             SWEEPER.init(sweeperOptions);
         });

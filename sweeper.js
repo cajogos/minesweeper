@@ -35,7 +35,25 @@ SWEEPER.init = function (sweeperOptions)
     {
         this.setOptions(sweeperOptions);
     }
-    this._checkElements();
+
+    try
+    {
+        this._checkElements();
+    }
+    catch (e)
+    {
+        swal({
+            title: 'Failed to start elements!',
+            text: e.message,
+            icon: 'error',
+            button: {
+                visible: false
+            },
+            closeOnClickOutside: false,
+            closeOnEsc: false
+        });
+    }
+
 };
 
 /**
@@ -175,7 +193,7 @@ SWEEPER._handleResetButtonClick = function (button, event)
  * @param {MouseEvent} event
  * @private
  */
-SWEEPER._handleRowsInputChange = function(input, event)
+SWEEPER._handleRowsInputChange = function (input, event)
 {
     var curValue = parseInt(input.val(), 10);
     if (curValue < this.MIN_ROWS)
@@ -225,7 +243,7 @@ SWEEPER._handleColsInputChange = function (input, event)
  * Function used to determine how many mines the board can display.
  * @private
  */
-SWEEPER._handleNumOfMines = function()
+SWEEPER._handleNumOfMines = function ()
 {
     // Calculate maximum amount of mines floor(rows * cols / 2)
     this.MAX_MINES = Math.floor(this.NUM_ROWS * this.NUM_COLS / 2);
@@ -245,7 +263,7 @@ SWEEPER._handleNumOfMines = function()
  * @param {MouseEvent} event
  * @private
  */
-SWEEPER._handleMinesInputChange = function(input, event)
+SWEEPER._handleMinesInputChange = function (input, event)
 {
     var curValue = parseInt(input.val(), 10);
     if (curValue < this.MIN_MINES)
