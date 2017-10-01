@@ -1,47 +1,14 @@
-div.mine-game {}
-
-
-div.mine-game div#game-area {}
-div.mine-game div#game-area * {
-    box-sizing: content-box;
-}
-
 /* GitHub buttons */
 .github-button {
     color: transparent;
 }
 
-/** FROM Mine.Style.css **/
 
-.button_up {
-    text-align: center;
-    vertical-align: middle;
-    cursor: default;
-    padding: 1px;
-    margin: 0;
-    border-left: 2px solid white;
-    border-top: 2px solid white;
-    border-right: 2px solid #808080;
-    border-bottom: 2px solid #808080;
-    background-color: #c0c0c0;
-    font-size: 15px;
-}
+div.mine-game {}
 
-.button_down {
-    text-align: center;
-    vertical-align: middle;
-    cursor: default;
-    padding-left: 2px;
-    padding-top: 2px;
-    padding-bottom: 0;
-    padding-right: 0;
-    margin: 0;
-    border-left: 2px solid #808080;
-    border-top: 2px solid #808080;
-    border-right: 2px solid #c0c0c0;
-    border-bottom: 2px solid #c0c0c0;
-    background-color: #c0c0c0;
-    font-size: 15px;
+div.mine-game div#game-area {}
+div#game-area * {
+    box-sizing: content-box;
 }
 
 .img_button_up {
@@ -55,7 +22,6 @@ div.mine-game div#game-area * {
     border-right: 2px solid #808080;
     border-bottom: 2px solid #808080;
     background-color: #c0c0c0;
-    font-size: 1px;
 }
 
 .img_button_down {
@@ -69,7 +35,6 @@ div.mine-game div#game-area * {
     border-right: 2px solid #c0c0c0;
     border-bottom: 2px solid #c0c0c0;
     background-color: #c0c0c0;
-    font-size: 1px;
 }
 
 .container_border {
@@ -178,6 +143,7 @@ div.mine-game div#game-area * {
 }
 
 .function_mid_div {
+    cursor: pointer;
     width: 32px;
     margin: auto;
     padding: 0;
@@ -208,7 +174,7 @@ div.mine-game div#game-area * {
 .mine_up {
     text-align: center;
     vertical-align: middle;
-    cursor: default;
+    cursor: pointer;
     padding: 1px;
     margin: 0;
     border-left: 2px solid white;
@@ -221,10 +187,14 @@ div.mine-game div#game-area * {
     font-weight: bold;
 }
 
+.mine_up .fa-flag {
+    color: orangered;
+}
+
 .mine_down {
     text-align: center;
     vertical-align: middle;
-    cursor: default;
+    cursor: pointer;
     padding: 1px;
     margin: 0;
     border-left: 2px solid #c0c0c0;
@@ -375,9 +345,10 @@ div.mine-game div#game-area * {
     border-right: 2px solid #808080;
     border-bottom: 2px solid #c0c0c0;
     background-color: red;
-    color: red;
-    font-size: 1px;
-    font-weight: bold;
+}
+
+.mine_down_bomb_blast .fa-bomb {
+    color: white;
 }
 
 .mine_down_bomb {
@@ -391,7 +362,12 @@ div.mine-game div#game-area * {
     border-right: 2px solid #808080;
     border-bottom: 2px solid #c0c0c0;
     background-color: #c0c0c0;
-    color: #c0c0c0;
-    font-size: 1px;
-    font-weight: bold;
+}
+
+.mine_down_bomb .fa-times {
+    color: red;
+}
+
+.mine_down_bomb .fa-bomb {
+    color: red;
 }

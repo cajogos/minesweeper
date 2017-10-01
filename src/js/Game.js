@@ -26,7 +26,6 @@ SWEEPER.Game = function (numRows, numCols, numMines)
     this.rightBox = undefined;
     this.middleBox = undefined;
     this.faceButton = undefined;
-    this.faceImg = undefined;
     this.mineArea = undefined;
     this.mineTable = undefined;
 };
@@ -213,16 +212,10 @@ SWEEPER.Game.prototype._createFaceButton = function ()
     this.faceButton.className = 'img_button_up';
     this.faceButton.style.width = '25px';
     this.faceButton.style.height = '25px';
+    this.faceButton.innerHTML = '<i class="fa fa-smile-o"></i>';
 
     // Set whether the button is pushed/paused
     this.faceButton.setAttribute('pushed', false);
-
-    // Face image icon
-    this.faceImg = document.createElement('img');
-    this.faceImg.border = 0;
-    this.faceImg.src = "images/smile.gif";
-    this.faceImg.style.padding = "0px";
-    this.faceImg.style.margin = "2px 0 0 0px";
 
     // Event listeners
     var gameSelf = this;
@@ -250,7 +243,6 @@ SWEEPER.Game.prototype._createFaceButton = function ()
         gameSelf._refreshMainContainer();
     };
 
-    this.faceButton.appendChild(this.faceImg);
     buttonContainer.appendChild(this.faceButton);
     this.middleBox.appendChild(buttonContainer);
 };
@@ -301,7 +293,6 @@ SWEEPER.Game.prototype._createMineButton = function (mineValue, mineIndex)
 {
     var mine = document.createElement('div');
     var tempValue; // Value under current block
-    var bomb, flag; // Object for mine and flag
     var expanded, marked, detected; // Flags for guesses
 
     mine.id = 'mine_' + mineIndex;
@@ -366,14 +357,9 @@ SWEEPER.Game.prototype._createMineButton = function (mineValue, mineIndex)
                     }
 
                     // Mark as mine
-                    flag = document.createElement('img');
-                    flag.style.width = '15px';
-                    flag.style.height = '15px';
-                    flag.style.padding = '0px';
-                    flag.style.margin = '0px';
-                    flag.src = 'images/flag.gif';
+                    this.innerHTML = '<i class="fa fa-flag"></i>';
+
                     // Avoid recreate
-                    this.appendChild(flag);
                     this.setAttribute('marked', true);
 
                     gameSelf.restMines--;
@@ -702,13 +688,8 @@ SWEEPER.Game.prototype._createMineButton = function (mineValue, mineIndex)
                         this.removeChild(this.firstChild);
                     }
 
-                    bomb = document.createElement('img');
-                    bomb.style.width = '15px';
-                    bomb.style.height = '15px';
-                    bomb.style.padding = '0px';
-                    bomb.style.margin = '0px';
-                    bomb.src = 'images/bomb.gif';
-                    this.appendChild(bomb);
+                    this.innerHTML = '<i class="fa fa-bomb"></i>';
+
                     gameSelf.gameOver(SWEEPER.Game.GAME_OVER_LOST);
                 }
                 this.setAttribute('opened', true);
@@ -779,21 +760,21 @@ SWEEPER.Game.prototype.gameOver = function (result)
     switch (result)
     {
         case SWEEPER.Game.GAME_OVER_WIN:
-            this.faceImg.src = 'images/win.gif';
+            this.faceButton.innerHTML = '<i class="fa fa-star"></i>';
             title = 'Well done!';
             message = 'You cleared ' + this.getNumMines() + ' mines in only ' + this.timeCount + ' seconds';
             state = 'success';
             break;
         case SWEEPER.Game.GAME_OVER_LOST:
             this._expandAll();
-            this.faceImg.src = 'images/blast.gif';
+            this.faceButton.innerHTML = '<i class="fa fa-bomb"></i>';
             title = 'You lost!';
             message = 'You failed to clear ' + this.getNumMines() + ' mines, please try again!';
             state = 'error';
             break;
         case SWEEPER.Game.GAME_OVER_TIMEOUT:
             this._expandAll();
-            this.faceImg.src = 'images/blast.gif';
+            this.faceButton.innerHTML = '<i class="fa fa-bomb"></i>';
             title = 'You ran out of time!';
             message = 'Whoa! It really takes you that long? Try again!';
             state = 'error';
@@ -948,7 +929,7 @@ SWEEPER.Game.prototype._expandMineArea = function (source)
 
 SWEEPER.Game.prototype._expandAll = function ()
 {
-    var i, tempValue, mine, bomb, error;
+    var i, tempValue, mine;
     var numCols = this.getNumCols();
     var numRows = this.getNumRows();
     var accumulate = numCols * numRows;
@@ -975,14 +956,8 @@ SWEEPER.Game.prototype._expandAll = function ()
                     }
                     mine.className = 'mine_down_bomb';
 
-                    // Bomb image
-                    bomb = document.createElement('img');
-                    bomb.style.width = '15px';
-                    bomb.style.height = '15px';
-                    bomb.style.padding = '0px';
-                    bomb.style.margin = '0px';
-                    bomb.src = 'images/bomb.gif';
-                    mine.appendChild(bomb);
+                    // Bomb
+                    mine.innerHTML = '<i class="fa fa-bomb"></i>';
 
                     mine.setAttribute('expanded', true);
                     break;
@@ -998,14 +973,8 @@ SWEEPER.Game.prototype._expandAll = function ()
                 mine.className = 'mine_down_bomb';
                 mine.innerText = '';
 
-                // Error image
-                error = document.createElement('img');
-                error.style.width = '15px';
-                error.style.height = '15px';
-                error.style.padding = '0px';
-                error.style.margin = '0px';
-                error.src = 'images/error.gif';
-                mine.appendChild(error);
+                // Error
+                mine.innerHTML = '<i class="fa fa-times"></i>';
 
                 mine.setAttribute('expanded', true);
             }
