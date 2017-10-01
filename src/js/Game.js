@@ -67,10 +67,39 @@ SWEEPER.Game.BLOCK_TYPE_DEFAULT = 0;
 SWEEPER.Game.BLOCK_TYPE_MINE = 9;
 
 /**
- * Function called to start the set-up game
- * @param {function} callback
+ * @type {number}
  */
-SWEEPER.Game.prototype.init = function (callback)
+SWEEPER.Game.MOUSE_BUTTON_LEFT = 0;
+
+/**
+ * @type {number}
+ */
+SWEEPER.Game.MOUSE_BUTTON_MIDDLE = 1;
+
+/**
+ * @type {number}
+ */
+SWEEPER.Game.MOUSE_BUTTON_RIGHT = 2;
+
+/**
+ * @type {number}
+ */
+SWEEPER.Game.GAME_OVER_WIN = 0;
+
+/**
+ * @type {number}
+ */
+SWEEPER.Game.GAME_OVER_LOST = 1;
+
+/**
+ * @type {number}
+ */
+SWEEPER.Game.GAME_OVER_TIMEOUT = 2;
+
+/**
+ * Function called to start the set-up of game
+ */
+SWEEPER.Game.prototype.init = function ()
 {
     // Type checking
     if (typeof this.getNumRows() !== 'number')
@@ -87,17 +116,15 @@ SWEEPER.Game.prototype.init = function (callback)
     }
 
     this._createMainContainer();
-
-    // If there is a callback function
-    if (typeof callback === 'function')
-    {
-        callback();
-    }
 };
 
+/**
+ * Function that creates the main container.
+ * @private
+ */
 SWEEPER.Game.prototype._createMainContainer = function ()
 {
-    // Each mine 18px + panel border + 3px + main_container's border 6px // TODO
+    // Each mine 18px + panel border + 3px + main_container's border 6px // TODO MAKE SIZES PROGRAMMATIC
     var fullWidth = 24 * this.getNumCols() + 14;
 
     // Main Container creation
@@ -119,7 +146,7 @@ SWEEPER.Game.prototype.reset = function ()
     this._refreshMainContainer();
 };
 
-SWEEPER.Game.prototype._refreshMainContainer = function()
+SWEEPER.Game.prototype._refreshMainContainer = function ()
 {
     this.isGameStarted = false;
     this.isGameFinished = false;
@@ -270,10 +297,6 @@ SWEEPER.Game.prototype._createMineArea = function ()
     this.mainContainer.appendChild(this.mineArea);
 };
 
-SWEEPER.Game.MOUSE_BUTTON_LEFT = 0;
-SWEEPER.Game.MOUSE_BUTTON_MIDDLE = 1;
-SWEEPER.Game.MOUSE_BUTTON_RIGHT = 2;
-
 SWEEPER.Game.prototype._createMineButton = function (mineValue, mineIndex)
 {
     var mine = document.createElement('div');
@@ -308,16 +331,12 @@ SWEEPER.Game.prototype._createMineButton = function (mineValue, mineIndex)
             return false;
         }
 
-        // Get attribute states
-        expanded = this.getAttribute('expanded');
-        marked = this.getAttribute('marked');
-        detected = this.getAttribute('detected');
-
         // Left button
         if (event.button === SWEEPER.Game.MOUSE_BUTTON_LEFT)
         {
             // Do not respond to expanded and marked mines
-            if (marked === 'true' || expanded === 'true')
+            if ((this.getAttribute('marked') === 'true') ||
+                (this.getAttribute('expanded') === 'true'))
             {
                 return false;
             }
@@ -331,8 +350,11 @@ SWEEPER.Game.prototype._createMineButton = function (mineValue, mineIndex)
             // Start timer
             gameSelf._beginTimer();
 
+            expanded = this.getAttribute('expanded');
             if (expanded === 'false')
             {
+                detected = this.getAttribute('detected');
+                marked = this.getAttribute('marked');
                 this.className = 'mine_up';
                 if (marked === 'false')
                 {
@@ -355,13 +377,8 @@ SWEEPER.Game.prototype._createMineButton = function (mineValue, mineIndex)
                     this.setAttribute('marked', true);
 
                     gameSelf.restMines--;
-                    if (gameSelf.restMines < 0)
-                    {
-                        gameSelf.restMines = 0;
-                    }
                     gameSelf.leftBox.innerText = gameSelf.restMines.toString();
-
-                    // CheckGameStatus // TODO
+                    gameSelf.checkGameStatus();
                 }
                 else
                 {
@@ -389,10 +406,11 @@ SWEEPER.Game.prototype._createMineButton = function (mineValue, mineIndex)
         }
 
         // Middle button
-        if (event.button = SWEEPER.Game.MOUSE_BUTTON_MIDDLE)
+        if (event.button === SWEEPER.Game.MOUSE_BUTTON_MIDDLE)
         {
             // Detect the surrounding blocks
-            if (expanded === 'false' && marked === 'false')
+            if ((this.getAttribute('expanded') === 'false') &&
+                (this.getAttribute('marked') === 'false'))
             {
                 this.className = 'mine_down';
             }
@@ -625,9 +643,10 @@ SWEEPER.Game.prototype._createMineButton = function (mineValue, mineIndex)
         if (!gameSelf.isFirstClick)
         {
             gameSelf.isFirstClick = true;
-            // If first click is mine - re-generate the mine position
-            if (parseInt(this.getAttribute('mine_value'), 10) === SWEEPER.Game.BLOCK_TYPE_MINE)
+            tempValue = parseInt(this.getAttribute('mine_value'), 10);
+            if (tempValue === SWEEPER.Game.BLOCK_TYPE_MINE)
             {
+                // If first click is mine - re-generate the mine position
                 var curIndex = parseInt(this.getAttribute('mine_index'), 10);
                 var numCols = gameSelf.getNumCols();
                 var numRows = gameSelf.getNumRows();
@@ -644,7 +663,8 @@ SWEEPER.Game.prototype._createMineButton = function (mineValue, mineIndex)
 
         gameSelf._beginTimer();
 
-        if (this.getAttribute('marked') === 'true' || this.getAttribute('expanded') === 'true')
+        if ((this.getAttribute('marked') === 'true') ||
+            (this.getAttribute('expanded') === 'true'))
         {
             return false;
         }
@@ -689,7 +709,7 @@ SWEEPER.Game.prototype._createMineButton = function (mineValue, mineIndex)
                     bomb.style.margin = '0px';
                     bomb.src = 'images/bomb.gif';
                     this.appendChild(bomb);
-                    gameSelf.gameOver(1);
+                    gameSelf.gameOver(SWEEPER.Game.GAME_OVER_LOST);
                 }
                 this.setAttribute('opened', true);
                 break;
@@ -708,7 +728,7 @@ SWEEPER.Game.prototype._createMineButton = function (mineValue, mineIndex)
  */
 SWEEPER.Game.prototype.checkGameStatus = function ()
 {
-    var playerWon = true;
+    var playerWon = false;
     var numCols = this.getNumCols();
     var numRows = this.getNumRows();
 
@@ -716,13 +736,17 @@ SWEEPER.Game.prototype.checkGameStatus = function ()
     for (i = 0; i < numRows * numCols; i++)
     {
         mine = document.getElementById('mine_' + i);
-        if (mine.getAttribute('mine_value') === SWEEPER.Game.BLOCK_TYPE_MINE)
+        if (parseInt(mine.getAttribute('mine_value'), 10) === SWEEPER.Game.BLOCK_TYPE_MINE)
         {
             // If is a mine block
             if (mine.getAttribute('marked') === 'false')
             {
                 playerWon = false;
                 break;
+            }
+            else
+            {
+                playerWon = true;
             }
         }
         else
@@ -732,18 +756,19 @@ SWEEPER.Game.prototype.checkGameStatus = function ()
                 playerWon = false;
                 break;
             }
+            else
+            {
+                playerWon = true;
+            }
         }
     }
 
     if (playerWon)
     {
-        this.gameOver(0);
+        this.gameOver(SWEEPER.Game.GAME_OVER_WIN);
     }
 };
 
-SWEEPER.Game.GAME_OVER_WIN = 0;
-SWEEPER.Game.GAME_OVER_LOST = 1;
-SWEEPER.Game.GAME_OVER_TIMEOUT = 2;
 
 /**
  * @param {number} result
@@ -800,7 +825,7 @@ SWEEPER.Game.prototype._beginTimer = function ()
         gameSelf.timeCount++;
         if (gameSelf.timeCount > 999)
         {
-            gameSelf.gameOver(2);
+            gameSelf.gameOver(SWEEPER.Game.GAME_OVER_TIMEOUT);
         }
         else
         {
@@ -911,8 +936,8 @@ SWEEPER.Game.prototype._expandMineArea = function (source)
         case 7:
         case 8:
             mine.className = 'mine_down_' + tempValue;
-            oMine.innerText = tempValue.toString();
-            oMine.setAttribute('expanded', true);
+            mine.innerText = tempValue.toString();
+            mine.setAttribute('expanded', true);
             break;
         case SWEEPER.Game.BLOCK_TYPE_MINE:
             break;

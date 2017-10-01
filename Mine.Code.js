@@ -13,6 +13,7 @@ var is_end = false; // is game ended?
 var is_first_click = false; // is first block opened
 var oMainFrame; // game main frame
 
+//todo done
 // initialize the mine area
 function InitMineArea(row, col, mine_num, mine_index)
 {
@@ -173,6 +174,7 @@ function InitMineArea(row, col, mine_num, mine_index)
     return mine_array;
 }
 
+// todo done
 //Refresh the main frame and restart the game
 function RefreshMainFrame()
 {
@@ -187,6 +189,7 @@ function RefreshMainFrame()
     document.getElementById("playground").replaceChild(oMainFrame, oldFrame);
 }
 
+// todo done
 //Smile face button
 function FaceButton()
 {
@@ -242,6 +245,7 @@ function FaceButton()
     return oButtonContainer;
 }
 
+// todo done
 //Expand the main frame after game over
 function ExpandAll()
 {
@@ -312,6 +316,7 @@ function ExpandAll()
     }
 }
 
+//todo done
 //Game over
 function GameOver(result)
 {
@@ -343,6 +348,7 @@ function GameOver(result)
     is_end = true;	//it's over
 }
 
+//todo done
 //Expand the relative blocks when click on a empty block
 function ExpandMineArea(source)
 {
@@ -479,6 +485,8 @@ function ExpandMineArea(source)
     return;
 }
 
+
+// todo done
 //Check whether the game finished
 function CheckGameStatus()
 {
@@ -523,6 +531,7 @@ function CheckGameStatus()
     }
 }
 
+//todo done
 //Mine object
 function MineButton(mine_value, mine_index)
 {
@@ -979,6 +988,7 @@ function MineButton(mine_value, mine_index)
     return oMine;
 }
 
+//todo done
 function FunctionBar(mine_num)
 {
     var oFunctionBar = document.createElement("div");
@@ -1009,6 +1019,7 @@ function FunctionBar(mine_num)
     return oFunctionBar;
 }
 
+// todo done
 function MineArea(row, col, mine_num)
 {
     var i, j, index;
@@ -1045,6 +1056,7 @@ function MineArea(row, col, mine_num)
     return oMinePanle;
 }
 
+//todo done
 //main frame object
 function MainFrame(row, col, mine_num)
 {
@@ -1063,6 +1075,7 @@ function MainFrame(row, col, mine_num)
     return oMainContainer;
 }
 
+// todo done
 function AvoidContextMenu()
 {
     event.cancelBubble = true
@@ -1070,7 +1083,7 @@ function AvoidContextMenu()
 
     return false;
 }
-
+// todo done
 function AvoidRightClick(e)
 {
     if (window.Event)
@@ -1087,7 +1100,7 @@ function AvoidRightClick(e)
         return false;
     }
 }
-
+// todo done
 function DisableContextMenu()
 {
     if (window.Event)
@@ -1098,6 +1111,7 @@ function DisableContextMenu()
     document.onmousedown = AvoidRightClick; // for all others
 }
 
+// todo done - CHECKED
 //timer function
 function CountTime()
 {
@@ -1113,6 +1127,7 @@ function CountTime()
     }
 }
 
+// todo done - CHECKED
 //start timer
 function BeginTimer()
 {
@@ -1123,6 +1138,7 @@ function BeginTimer()
     }
 }
 
+// TODO DONE - CHECKED
 function startMinesweeper(row, col, mine_num)
 {
     //first disable the context event

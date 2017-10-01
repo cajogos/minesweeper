@@ -80,7 +80,6 @@ SWEEPER.setOptions = function (options)
     }
 };
 
-
 SWEEPER.startGame = function ()
 {
     try
@@ -91,7 +90,7 @@ SWEEPER.startGame = function ()
         {
             SWEEPER.gameArea.html('');
             this.game = new SWEEPER.Game(this.NUM_ROWS, this.NUM_COLS, this.NUM_MINES);
-            this.game.init(this.startGameCallback);
+            this.game.init();
         }
 
         this.buttons.start.attr('disabled', true);
@@ -103,7 +102,6 @@ SWEEPER.startGame = function ()
             text: e.message,
             icon: 'error'
         });
-        console.warn(e);
     }
 };
 
@@ -117,14 +115,18 @@ SWEEPER.resetGame = function()
 
 SWEEPER._checkConfig = function ()
 {
-    // TODO
-    console.warn('CHECK CONFIG NEEDS IMPLEMENTATION');
-};
-
-SWEEPER.startGameCallback = function ()
-{
-    // TODO: GOOD PLACE TO DISABLE ELEMENTS
-    console.log('hello there! i am a callback');
+    if (typeof this.NUM_ROWS !== 'number')
+    {
+        throw Error('Number of rows is not a valid number!');
+    }
+    if (typeof this.NUM_COLS !== 'number')
+    {
+        throw Error('Number of columns is not a valid number!');
+    }
+    if (typeof this.NUM_MINES !== 'number')
+    {
+        throw Error('Number of mines is not a valid number!');
+    }
 };
 
 /**
