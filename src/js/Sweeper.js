@@ -27,6 +27,14 @@ var SWEEPER = {
 };
 
 /**
+ * @returns {jQuery}
+ */
+SWEEPER.getGameArea = function ()
+{
+    return this.gameArea;
+};
+
+/**
  * @param {object} sweeperOptions
  */
 SWEEPER.init = function (sweeperOptions)
@@ -53,7 +61,6 @@ SWEEPER.init = function (sweeperOptions)
             closeOnEsc: false
         });
     }
-
 };
 
 /**
@@ -80,20 +87,30 @@ SWEEPER.startGame = function ()
     {
         this._checkConfig();
 
-        this.game = new SWEEPER.Game();
-        this.game.init();
+        this.game = new SWEEPER.Game(this.NUM_ROWS, this.NUM_COLS, this.NUM_MINES);
+        this.game.init(this.startGameCallback);
     }
     catch (e)
     {
-        // TODO SHOW ERRORS
+        swal({
+            title: 'Failed to start the game!',
+            text: e.message,
+            icon: 'error'
+        });
+        console.warn(e);
     }
-    // TODO
 };
 
 SWEEPER._checkConfig = function ()
 {
     // TODO
     console.warn('CHECK CONFIG NEEDS IMPLEMENTATION');
+};
+
+SWEEPER.startGameCallback = function ()
+{
+    // TODO: GOOD PLACE TO DISABLE ELEMENTS
+    console.log('hello there! i am a callback');
 };
 
 /**
