@@ -1,15 +1,15 @@
-A simple HTML based Minesweeper game
------------------------------------------------------------------------------
-**Playable demo: http://vincentchen.me/works/minesweeper/index.html**
+# Minesweeper in HTML
 
-* Use CSS/HTML to create the classic Windows Minesweeper game UI.
-* Use JavaScript to implement game logic.
-* Tutorial:
-  - Click left mouse button to uncover a block.
-  - Click right mouse button once to place a flag mark, click right mouse button twice to place a question mark, click right mouse button three times to clear all marks.
-  - Click middle mouse button on any uncovered block to perform a quick uncovering for surrounding blocks.
+- Simple minesweeper game written in JavaScript, HTML and CSS.
+- Original version by [artyyouth](https://github.com/artyyouth/minesweeper).
 
-* Tested on Chrome, other browsers are not guaranteed.
-* This game is modified from a very old code base I wrote in 2005.
-  - Original version (only support IE7 or earlier): http://vincentchen.me/works/NixMine/index.html
-  - Currently implementation is still not good, I will keep refactoring it.
+## Playable demo
+
+- Demo will be coming soon to my personal website:
+  - https://carlos.fyi/minesweeper
+
+## How to play
+
+- Click with the `left mouse` button to **uncover a block**.
+- Click with the `right mouse` button once to **place a flag**. Twice to place a **question mark** and thrice to **clear the marks**.
+- Click with the `middle mouse` button to do a **quick uncovering of surrounding blocks**.
