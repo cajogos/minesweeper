@@ -76,12 +76,24 @@ SWEEPER.setOptions = function (options)
 
 SWEEPER.startGame = function ()
 {
+    try
+    {
+        this._checkConfig();
+
+        this.game = new SWEEPER.Game();
+        this.game.init();
+    }
+    catch (e)
+    {
+        // TODO SHOW ERRORS
+    }
     // TODO
 };
 
 SWEEPER._checkConfig = function ()
 {
     // TODO
+    console.warn('CHECK CONFIG NEEDS IMPLEMENTATION');
 };
 
 /**
@@ -172,7 +184,7 @@ SWEEPER._configElements = function ()
 SWEEPER._handleStartButtonClick = function (button, event)
 {
     // Start the game
-    console.log('START BUTTON', button, event);
+    this.startGame();
 };
 
 /**
