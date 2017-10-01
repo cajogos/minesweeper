@@ -7,6 +7,18 @@ SWEEPER.Game = function()
 };
 SWEEPER.Game.prototype.constructor = SWEEPER.Game;
 
+/**
+ * Default block type!
+ * @type {number}
+ */
+SWEEPER.Game.BLOCK_TYPE_DEFAULT = 0;
+
+/**
+ * Blocks that are mines!
+ * @type {number}
+ */
+SWEEPER.Game.BLOCK_TYPE_MINE = 9;
+
 SWEEPER.Game.prototype.init = function()
 {
     var numRows = 8;
@@ -57,7 +69,7 @@ SWEEPER.Game.prototype._initMineArea = function (numRows, numCols, numMines, min
         for (j = 0; j < numCols; j++)
         {
             index = numCols * i + j;
-            minesArray[index] = 0;
+            minesArray[index] = SWEEPER.Game.BLOCK_TYPE_DEFAULT;
         }
     }
 
@@ -82,7 +94,7 @@ SWEEPER.Game.prototype._initMineArea = function (numRows, numCols, numMines, min
     // Set the mines' positions
     for (i = 0; i < numMines; i++)
     {
-        minesArray[minesPos[i]] = 9; // TODO CHECK IF 9 IS A CONSTANT FOR MINE
+        minesArray[minesPos[i]] = SWEEPER.Game.BLOCK_TYPE_MINE;
     }
 
     // Generate the number beside a mine
@@ -92,14 +104,14 @@ SWEEPER.Game.prototype._initMineArea = function (numRows, numCols, numMines, min
         {
             index = numCols * i + j;
             // If there is a mine
-            if (minesArray[index] === 9)
+            if (minesArray[index] === SWEEPER.Game.BLOCK_TYPE_MINE)
             {
                 // Row (i)
                 // (i, j - 1)
                 if ((j - 1) >= 0)
                 {
                     index = numCols * i + j - 1;
-                    if (minesArray[index] !== 9)
+                    if (minesArray[index] !== SWEEPER.Game.BLOCK_TYPE_MINE)
                     {
                         minesArray[index]++;
                     }
@@ -108,7 +120,7 @@ SWEEPER.Game.prototype._initMineArea = function (numRows, numCols, numMines, min
                 if ((j + 1) < numCols)
                 {
                     index = numCols * i + j + 1;
-                    if (minesArray[index] !== 9)
+                    if (minesArray[index] !== SWEEPER.Game.BLOCK_TYPE_MINE)
                     {
                         minesArray[index]++;
                     }
@@ -119,7 +131,7 @@ SWEEPER.Game.prototype._initMineArea = function (numRows, numCols, numMines, min
                 {
                     // (i - 1, j)
                     index = numCols * (i - 1) + j;
-                    if (minesArray[index] !== 9)
+                    if (minesArray[index] !== SWEEPER.Game.BLOCK_TYPE_MINE)
                     {
                         minesArray[index]++;
                     }
@@ -127,7 +139,7 @@ SWEEPER.Game.prototype._initMineArea = function (numRows, numCols, numMines, min
                     if ((j - 1) >= 0)
                     {
                         index = numCols * (i - 1) + j - 1;
-                        if (minesArray[index] !== 9)
+                        if (minesArray[index] !== SWEEPER.Game.BLOCK_TYPE_MINE)
                         {
                             minesArray[index]++;
                         }
@@ -136,7 +148,7 @@ SWEEPER.Game.prototype._initMineArea = function (numRows, numCols, numMines, min
                     if ((j + 1) < numCols)
                     {
                         index = numCols * (i - 1) + j + 1;
-                        if (minesArray[index] !== 9)
+                        if (minesArray[index] !== SWEEPER.Game.BLOCK_TYPE_MINE)
                         {
                             minesArray[index]++;
                         }
@@ -148,7 +160,7 @@ SWEEPER.Game.prototype._initMineArea = function (numRows, numCols, numMines, min
                 {
                     // (i + 1, j)
                     index = numCols * (i + 1) + j;
-                    if (minesArray[index] !== 9)
+                    if (minesArray[index] !== SWEEPER.Game.BLOCK_TYPE_MINE)
                     {
                         minesArray[index]++;
                     }
@@ -156,7 +168,7 @@ SWEEPER.Game.prototype._initMineArea = function (numRows, numCols, numMines, min
                     if ((j - 1) >= 0)
                     {
                         index = numCols * (i + 1) + j - 1;
-                        if (minesArray[index] !== 9)
+                        if (minesArray[index] !== SWEEPER.Game.BLOCK_TYPE_MINE)
                         {
                             minesArray[index]++;
                         }
@@ -165,7 +177,7 @@ SWEEPER.Game.prototype._initMineArea = function (numRows, numCols, numMines, min
                     if ((j + 1) < numCols)
                     {
                         index = numCols * (i + 1) + j + 1;
-                        if (minesArray[index] !== 9)
+                        if (minesArray[index] !== SWEEPER.Game.BLOCK_TYPE_MINE)
                         {
                             minesArray[index]++;
                         }
