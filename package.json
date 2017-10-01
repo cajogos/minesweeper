@@ -1,0 +1,30 @@
+{
+  "name": "minesweeper",
+  "version": "0.0.1",
+  "description": "A simple browser Minesweeper game.",
+  "main": "index.js",
+  "dependencies": {
+    "gulp": "^3.9.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "gulp": "gulp"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cajogos/minesweeper.git"
+  },
+  "keywords": [
+    "minesweeper",
+    "mines",
+    "cajogos",
+    "game"
+  ],
+  "author": "Carlos Ferreira",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/cajogos/minesweeper/issues"
+  },
+  "homepage": "https://github.com/cajogos/minesweeper#readme"
+}
