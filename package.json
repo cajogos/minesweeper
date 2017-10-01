@@ -6,7 +6,9 @@
   "dependencies": {
     "gulp": "^3.9.1"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "jquery": "^3.2.1"
+  },
   "scripts": {
     "gulp": "gulp"
   },
